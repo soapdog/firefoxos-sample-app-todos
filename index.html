@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ToDos</title>
+    <meta charset="utf8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+
+    <!--
+    Gaia Building Blocks Styles
+    learn more about Gaia Building Blocks at:
+    http://buildingfirefoxos.com/building-blocks/
+    -->
+    <link href="building_blocks/util.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/fonts.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/transitions.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/style/headers.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/style_unstable/lists.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/style_unstable/drawer.css" rel="stylesheet" type="text/css">
+    <!-- Icons -->
+    <link rel="stylesheet" href="building_blocks/icons/styles/action_icons.css">
+    <link rel="stylesheet" href="building_blocks/icons/styles/media_icons.css">
+    <link rel="stylesheet" href="building_blocks/icons/styles/comms_icons.css">
+    <link rel="stylesheet" href="building_blocks/icons/styles/settings_icons.css">
+
+    <!-- Transitions -->
+    <link rel="stylesheet" href="building_blocks/transitions.css">
+
+    <!--
+    Our custom CSS entries are on custom.css
+    -->
+    <link rel="stylesheet" href="custom.css" type="text/css"/>
+
+    <!--
+    Most of the logic of the application is contained in app.js with some general
+    utility functions in util.js. The routines responsible for manipulating to do
+    lists are on model.js
+    -->
+    <script src="model.js"></script>
+    <script src="util.js"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+
+<section id="main-screen" data-position="current">
+    <section data-type="sidebar">
+        <header>
+            <menu type="toolbar">
+                <a id="create-new-list" href="#">New</a>
+            </menu>
+            <h1>To Do Lists</h1>
+        </header>
+        <nav>
+            <ul id="todolists">
+                <li><a href="#">item 1</a></li>
+
+            </ul>
+        </nav>
+    </section>
+
+    <section role="region" id="drawer">
+        <header class="fixed">
+            <a href="#"><span class="icon icon-menu">hide sidebar</span></a>
+            <a href="#drawer"><span class="icon icon-menu">show sidebar</span></a>
+            <menu type="toolbar">
+                <button><span class="icon icon-add">add</span></button>
+            </menu>
+            <h1>ToDo <em class="list-name">my list</em></h1>
+        </header>
+        <article class="content scrollable header">
+            <div data-type="list">
+                <ul id="todo-list" data-type="edit">
+
+                </ul>
+            </div>
+        </article>
+    </section>
+</section>
+</body>
+</html>
