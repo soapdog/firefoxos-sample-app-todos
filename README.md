@@ -16,3 +16,4 @@ Google Summer of Code
 =====================
 
 This app was created as a part of a collection of sample apps for Firefox OS during Google Summer of Code 2013.
+You can check [my original proposal](https://wiki.mozilla.org/SummerOfCode/2013/FirefoxOSSampleApps).
