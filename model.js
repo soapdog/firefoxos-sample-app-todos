@@ -59,7 +59,7 @@ request.onupgradeneeded = function (event) {
 
         var item1 = new ToDoItem("Paint Rainbows"),
             item2 = new ToDoItem("Feed the Unicorns"),
-            item3 = new ToDoItem("Be Awesome"),
+            item3 = new ToDoItem("Blaze Your Own Path"),
             sampleList = new ToDoList("Sample To Do List");
 
         addItemToToDoList(sampleList, item1);

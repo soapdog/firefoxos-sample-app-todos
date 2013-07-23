@@ -128,11 +128,29 @@ function renameCurrentList() {
     });
 }
 
+
+function addNewTodoItem() {
+    document.querySelector('#todo-item-detail').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+}
+
 window.onload = function () {
     console.log("starting the application...");
 
+    // drawer events
     document.querySelector("#create-new-list").addEventListener("click", createNewList);
+
+    // main screen events
     document.querySelector(".list-name").addEventListener("click", renameCurrentList);
+    document.querySelector('#add-new-todo-item').addEventListener ('click', addNewTodoItem);
+
+    // to do item details events
+    document.querySelector('#back-to-list').addEventListener ('click', function () {
+        document.querySelector('#todo-item-detail').className = 'right';
+        document.querySelector('[data-position="current"]').className = 'current';
+    });
+
+
 
     // the entry point for the app is the following command
     refreshToDoLists();
