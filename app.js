@@ -228,7 +228,20 @@ function showToDoItemDetails(inItemIndex) {
 }
 
 function saveTodoItemChanges() {
-    currentList.items[currentItemIndex].content = document.querySelector("#todo-item-content").value;
+    var itemTitle = document.querySelector("#todo-item-content").value,
+        isAlarmSet = document.querySelector("#todo-item-set-alarm").checked,
+        alarmDate = document.querySelector("#todo-item-alarm-date").value,
+        alarmTime = document.querySelector("#todo-item-alarm-time").value;
+
+    currentList.items[currentItemIndex].content = itemTitle;
+
+    if (isAlarmSet) {
+        currentList.items[currentItemIndex].alarmIsSet = true;
+        currentList.items[currentItemIndex].alarm = alarmDate;
+        console.log("alarm is set to", alarmDate);
+    }
+
+
     saveToDoList(currentList, function(err, succ){
         if (!err) {
             console.log("list saved after item changed");
@@ -290,11 +303,11 @@ window.onload = function () {
     document.querySelector('#add-new-todo-item').addEventListener ('click', addNewTodoItem);
     document.querySelector('#edit-list-mode').addEventListener ('click', function() {
         if (listDisplayMode) {
-            showToDoList(currentList);
             listDisplayMode = false;
+            showToDoList(currentList);
         } else {
-            showToDoList(currentList, "edit");
             listDisplayMode = true;
+            showToDoList(currentList, "edit");
         }
     });
 
