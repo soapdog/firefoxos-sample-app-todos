@@ -81,6 +81,7 @@ function ToDoItem(inContent) {
     this.completed = false;
     this.alarmIsSet = false;
     this.alarm = Date.now();
+    this.alarmID = 0;
 }
 
 /**
@@ -108,8 +109,9 @@ function addItemToToDoList(inToDoList, inItem) {
  * This function will load all to do lists and fire its callback routine for each
  * memo loaded.
  * @param inCallback
+ * @param inCallbackEnd
  */
-function getAllLists(inCallback) {
+function getAllLists(inCallback, inCallbackEnd) {
     var objectStore = db.transaction("todo").objectStore("todo");
     console.log("Listing to do lists...");
 
@@ -119,6 +121,10 @@ function getAllLists(inCallback) {
             console.log("Found list #" + cursor.value.id + " - " + cursor.value.title);
             inCallback(null, cursor.value);
             cursor.continue();
+        } else {
+            if (inCallbackEnd) {
+                inCallbackEnd();
+            }
         }
     };
 }

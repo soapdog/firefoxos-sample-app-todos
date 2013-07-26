@@ -16,6 +16,13 @@
     <link href="building_blocks/style/headers.css" rel="stylesheet" type="text/css">
     <link href="building_blocks/style_unstable/lists.css" rel="stylesheet" type="text/css">
     <link href="building_blocks/style_unstable/drawer.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/style/input_areas.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/style/switches.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/style/edit_mode.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/style/status.css" rel="stylesheet" type="text/css">
+
+
+
     <!-- Icons -->
     <link rel="stylesheet" href="building_blocks/icons/styles/action_icons.css">
     <link rel="stylesheet" href="building_blocks/icons/styles/media_icons.css">
@@ -32,11 +39,12 @@
 
     <!--
     Most of the logic of the application is contained in app.js with some general
-    utility functions in util.js. The routines responsible for manipulating to do
+    utility functions in utils.js. The routines responsible for manipulating to do
     lists are on model.js
     -->
     <script src="model.js"></script>
-    <script src="util.js"></script>
+    <script src="utils.js"></script>
+    <script src="status.js"></script>
     <script src="app.js"></script>
 </head>
 <body>
@@ -52,7 +60,10 @@
         <nav>
             <ul id="todolists">
                 <li><a href="#">item 1</a></li>
-
+            </ul>
+            <h2>Extra</h2>
+            <ul>
+                <li><a href="#" id="app-install">Install this App</a></li>
             </ul>
         </nav>
     </section>
@@ -77,12 +88,20 @@
 </section>
 
 
-<section role="region" id="todo-item-detail" class="skin-dark" data-position="right">
+<section role="region" id="todo-item-detail" data-position="right">
     <header>
         <button id="back-to-list"><span class="icon icon-back">back</span>
         </button>
         <h1>Edit Item</h1>
     </header>
+    <article class="content scrollable header">
+        <form>
+            <p>
+                <input id="todo-item-content" type="text" placeholder="Placeholder" required>
+                <button type="reset">Clear</button>
+            </p>
+        </form>
+    </article>
 </section>
 
 </body>

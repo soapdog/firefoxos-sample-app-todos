@@ -1,4 +1,4 @@
-var currentList;
+var currentList, currentItemIndex;
 
 /**
  * This function builds the list of to do lists used in the drawer in the
@@ -25,19 +25,19 @@ function refreshToDoLists() {
     }
 
     getAllLists(function (err, value) {
-        var memoItem = document.createElement("li");
-        var memoP = document.createElement("a");
-        var memoTitle = document.createTextNode(value.title);
+        var listItem = document.createElement("li");
+        var listLink = document.createElement("a");
+        var listTitle = document.createTextNode(value.title);
 
-        memoItem.addEventListener("click", function () {
+        listItem.addEventListener("click", function () {
             console.log("Clicked to do list #" + value.id);
             showToDoList(value);
             window.location = "#"; // <-- this is used to close the drawer
         });
 
-        memoP.appendChild(memoTitle);
-        memoItem.appendChild(memoP);
-        todoListsContainer.appendChild(memoItem);
+        listLink.appendChild(listTitle);
+        listItem.appendChild(listLink);
+        todoListsContainer.appendChild(listItem);
 
 
     });
@@ -72,7 +72,7 @@ function showToDoList(inList) {
  */
 function appendItemToListDisplay(inItem, inIndex) {
     var listContentContainer = document.querySelector("#todo-list"),
-        template = '<label class="danger"><input type="checkbox"><span></span></label><a href="#"><p>'+inItem.content+'</p><p><time>5:43PM</time></p></a>',
+        template = '<label><input class="item-completed-toogle" type="checkbox" /><span></span></label><a href="javascript:showToDoItemDetails(1);"><p>'+inItem.content+'</p><p><time></time></p></a>',
         listItem = document.createElement("li");
 
     listItem.innerHTML = template;
@@ -106,6 +106,7 @@ function createNewList() {
             list.id = succ;
             refreshToDoLists();
             showToDoList(list);
+            utils.status.show("New List Created.");
         }
     });
 }
@@ -130,8 +131,60 @@ function renameCurrentList() {
 
 
 function addNewTodoItem() {
+    var todoItem = new ToDoItem("Untitled To Do");
+    addItemToToDoList(currentList, todoItem);
+    showToDoList(currentList);
+    showToDoItemDetails(currentList.items.length - 1);
+}
+
+function showToDoItemDetails(inItemIndex) {
+    var todoItem = currentList.items[inItemIndex];
+    currentItemIndex = inItemIndex;
+
+    document.querySelector("#todo-item-content").value = todoItem.content;
     document.querySelector('#todo-item-detail').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
+}
+
+/**
+ * Allows the application to be installed on Firefox OS device (and other devices supporting open web apps).
+ */
+function appInstall() {
+    var manifestUrl = location.protocol + "//" + location.host + "/manifest.webapp";
+    var request = window.navigator.mozApps.install(manifestUrl);
+    request.onsuccess = function () {
+        // Save the App object that is returned
+        var appRecord = this.result;
+        utils.status.show('Installation successful!');
+    };
+    request.onerror = function () {
+        // Display the error information from the DOMError object
+        utils.status.show('Install failed, error: ' + this.error.name);
+    };
+}
+
+/**
+ * This loads all lists and then picks the first one and display it.
+ */
+function initializeApp() {
+    var allToDoLists = [];
+
+    getAllLists(
+        function(err, value){
+            allToDoLists.push(value);
+        },
+        function() {
+            if (allToDoLists.length > 0) {
+                console.log("initializing, loading first list");
+                showToDoList(allToDoLists[0]);
+            } else {
+                // application may still be opening indexeddb.
+                console.log("initializing, no list in memory, waiting...");
+                setTimeout(initializeApp, 500);
+            }
+        }
+    );
+
 }
 
 window.onload = function () {
@@ -139,6 +192,7 @@ window.onload = function () {
 
     // drawer events
     document.querySelector("#create-new-list").addEventListener("click", createNewList);
+    document.querySelector("#app-install").addEventListener("click", appInstall);
 
     // main screen events
     document.querySelector(".list-name").addEventListener("click", renameCurrentList);
@@ -154,5 +208,6 @@ window.onload = function () {
 
     // the entry point for the app is the following command
     refreshToDoLists();
+    initializeApp();
 
 };

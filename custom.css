@@ -174,3 +174,15 @@ div[role="slider"] > label.icon {
 .icon.icon-add {
     background-image: url("building_blocks/style/headers/images/icons/add.png");
 }
+
+.aside {
+    display: inline-block;
+    float: left;
+    padding-right: 30px;
+}
+
+#edit-todo-item select,
+#edit-todo-item input[type="time"] {
+    position: absolute;
+    opacity: 0;
+}

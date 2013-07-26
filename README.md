@@ -9,7 +9,9 @@ Usage of Web APIs
 =================
 
 This app uses [IndexedDB](https://developer.mozilla.org/en-US/docs/IndexedDB) to store the todo lists.
-It uses [Alarm API](https://wiki.mozilla.org/WebAPI/AlarmAPI) to schedule alarms for specific to do items.
+It uses [Alarm API](https://wiki.mozilla.org/WebAPI/AlarmAPI) to schedule alarms for specific to do items. The app installation
+is handled using [Open WebApps API](https://developer.mozilla.org/en-US/docs/Web/Apps/JavaScript_API?redirectlocale=en-US&redirectslug=JavaScript_API)
+
 
 
 Google Summer of Code
