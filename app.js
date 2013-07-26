@@ -72,14 +72,20 @@ function showToDoList(inList) {
  */
 function appendItemToListDisplay(inItem, inIndex) {
     var listContentContainer = document.querySelector("#todo-list"),
-        template = '<label><input class="item-completed-toogle" type="checkbox" /><span></span></label><a href="javascript:showToDoItemDetails(1);"><p>'+inItem.content+'</p><p><time></time></p></a>',
+        template = '<label><input type="checkbox"><span></span></label><p>'+inItem.content+'</p><p><time></time></p>',
         listItem = document.createElement("li");
 
     listItem.innerHTML = template;
 
+    listItem.classList.add("todo-item");
+    listItem.setAttribute("data-todo-index", inIndex);
     listItem.querySelector("input").checked = inItem.completed;
+    listContentContainer.appendChild(listItem);
 
-    listItem.querySelector("input").addEventListener("click", function(e) {
+    /*
+    listItem.addEventListener("click", function(e) {
+        console.log(e.target);
+        e.target.style.backgroundColor = "red";
         inItem.completed = listItem.querySelector("input").checked
         currentList.items[inIndex] = inItem;
         saveToDoList(currentList, function(err, succ){
@@ -88,9 +94,12 @@ function appendItemToListDisplay(inItem, inIndex) {
                 currentList.id = succ;
             }
         });
-    });
 
-    listContentContainer.appendChild(listItem);
+
+
+
+    });
+    */
 }
 
 /**
@@ -133,8 +142,15 @@ function renameCurrentList() {
 function addNewTodoItem() {
     var todoItem = new ToDoItem("Untitled To Do");
     addItemToToDoList(currentList, todoItem);
-    showToDoList(currentList);
-    showToDoItemDetails(currentList.items.length - 1);
+
+    saveToDoList(currentList, function(err, succ) {
+        if (!err) {
+            currentList.id = succ;
+            showToDoList(currentList);
+            showToDoItemDetails(currentList.items.length - 1);
+
+        }
+    });
 }
 
 function showToDoItemDetails(inItemIndex) {
@@ -148,6 +164,12 @@ function showToDoItemDetails(inItemIndex) {
 
 function saveTodoItemChanges() {
     currentList.items[currentItemIndex].content = document.querySelector("#todo-item-content").value;
+    saveToDoList(currentList, function(err, succ){
+        if (!err) {
+            console.log("list saved after item changed");
+            currentList.id = succ;
+        }
+    });
 }
 
 /**

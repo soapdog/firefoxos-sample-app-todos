@@ -170,7 +170,7 @@ function saveToDoList(inToDoList, inCallback) {
  * @param inId
  * @param inCallback
  */
-function deleteMemo(inId, inCallback) {
+function deleteList(inId, inCallback) {
     console.log("Deleting list...");
     var request = db.transaction(["todo"], "readwrite").objectStore("todo").delete(inId);
 
