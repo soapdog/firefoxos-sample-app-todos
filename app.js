@@ -72,20 +72,34 @@ function showToDoList(inList) {
  */
 function appendItemToListDisplay(inItem, inIndex) {
     var listContentContainer = document.querySelector("#todo-list"),
-        template = '<label><input type="checkbox"><span></span></label><p>'+inItem.content+'</p><p><time></time></p>',
-        listItem = document.createElement("li");
+        listItem = document.createElement("li"),
+        listLabel = document.createElement("label"),
+        listInput = document.createElement("input"),
+        listSpan = document.createElement("span"),
+        listFirstParagraph = document.createElement("p"),
+        listContent = document.createTextNode(inItem.content),
+        listSecondParagraph = document.createElement("p"),
+        listTime = document.createElement("time");
 
-    listItem.innerHTML = template;
+
+
+    listInput.setAttribute("type", "checkbox");
+    listLabel.appendChild(listInput);
+    listLabel.appendChild(listSpan);
+    listItem.appendChild(listLabel);
+
+    listFirstParagraph.appendChild(listContent);
+    listSecondParagraph.appendChild(listTime);
+    listItem.appendChild(listFirstParagraph);
+    listInput.appendChild(listSecondParagraph);
 
     listItem.classList.add("todo-item");
     listItem.setAttribute("data-todo-index", inIndex);
     listItem.querySelector("input").checked = inItem.completed;
     listContentContainer.appendChild(listItem);
 
-    /*
+
     listItem.addEventListener("click", function(e) {
-        console.log(e.target);
-        e.target.style.backgroundColor = "red";
         inItem.completed = listItem.querySelector("input").checked
         currentList.items[inIndex] = inItem;
         saveToDoList(currentList, function(err, succ){
@@ -94,12 +108,8 @@ function appendItemToListDisplay(inItem, inIndex) {
                 currentList.id = succ;
             }
         });
-
-
-
-
     });
-    */
+
 }
 
 /**
