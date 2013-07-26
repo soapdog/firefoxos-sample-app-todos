@@ -146,6 +146,10 @@ function showToDoItemDetails(inItemIndex) {
     document.querySelector('[data-position="current"]').className = 'left';
 }
 
+function saveTodoItemChanges() {
+    currentList.items[currentItemIndex].content = document.querySelector("#todo-item-content").value;
+}
+
 /**
  * Allows the application to be installed on Firefox OS device (and other devices supporting open web apps).
  */
@@ -200,9 +204,13 @@ window.onload = function () {
 
     // to do item details events
     document.querySelector('#back-to-list').addEventListener ('click', function () {
+        saveTodoItemChanges();
+        showToDoList(currentList);
         document.querySelector('#todo-item-detail').className = 'right';
         document.querySelector('[data-position="current"]').className = 'current';
     });
+
+    document.querySelector("#todo-item-content").addEventListener("input", saveTodoItemChanges);
 
 
 
