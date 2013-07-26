@@ -1,4 +1,5 @@
 var currentList, currentItemIndex;
+var listDisplayMode = true;
 
 /**
  * This function builds the list of to do lists used in the drawer in the
@@ -52,6 +53,7 @@ function showToDoList(inList, inMode) {
         listContentContainer = document.querySelector("#todo-list");
 
     inMode = inMode || "display";
+    console.log("showing list in mode:", inMode);
 
     listNameContainer.innerHTML = inList.title;
 
@@ -158,14 +160,9 @@ function appendEditableItemToListDisplay(inItem, inIndex) {
     listContentContainer.appendChild(listItem);
 
     listItem.addEventListener("click", function(e) {
-        inItem.completed = listItem.querySelector("input").checked
-        currentList.items[inIndex] = inItem;
-        saveToDoList(currentList, function(err, succ){
-            if (!err) {
-                console.log("list saved.");
-                currentList.id = succ;
-            }
-        });
+        console.log("edit item", inIndex);
+        currentItemIndex = inIndex;
+        showToDoItemDetails(inIndex);
     });
 
 }
@@ -282,8 +279,6 @@ function initializeApp() {
 }
 
 window.onload = function () {
-    var listDisplayMode = true;
-
     console.log("starting the application...");
 
     // drawer events
@@ -296,10 +291,11 @@ window.onload = function () {
     document.querySelector('#edit-list-mode').addEventListener ('click', function() {
         if (listDisplayMode) {
             showToDoList(currentList);
+            listDisplayMode = false;
         } else {
             showToDoList(currentList, "edit");
+            listDisplayMode = true;
         }
-        listDisplayMode = !listDisplayMode;
     });
 
 
