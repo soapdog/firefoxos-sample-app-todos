@@ -47,9 +47,11 @@ function refreshToDoLists() {
  * Picks a given to do list and displays it in the main screen.
  * @param inList
  */
-function showToDoList(inList) {
+function showToDoList(inList, inMode) {
     var listNameContainer = document.querySelector(".list-name"),
         listContentContainer = document.querySelector("#todo-list");
+
+    inMode = inMode || "display";
 
     listNameContainer.innerHTML = inList.title;
 
@@ -59,11 +61,17 @@ function showToDoList(inList) {
 
     for (var i = 0, len = inList.items.length; i < len; i++) {
         var todoItem = inList.items[i];
-        appendItemToListDisplay(todoItem, i);
+
+        if (inMode === "display") {
+            appendItemToListDisplay(todoItem, i);
+        } else {
+            appendEditableItemToListDisplay(todoItem, i);
+        }
     }
 
     currentList = inList;
 }
+
 /**
  * This appends an item to the list display. It is used by showToDoList() to build the
  * main list display
@@ -96,8 +104,58 @@ function appendItemToListDisplay(inItem, inIndex) {
     listItem.classList.add("todo-item");
     listItem.setAttribute("data-todo-index", inIndex);
     listItem.querySelector("input").checked = inItem.completed;
+
     listContentContainer.appendChild(listItem);
 
+    listItem.addEventListener("click", function(e) {
+        inItem.completed = listItem.querySelector("input").checked
+        currentList.items[inIndex] = inItem;
+        saveToDoList(currentList, function(err, succ){
+            if (!err) {
+                console.log("list saved.");
+                currentList.id = succ;
+            }
+        });
+    });
+
+}
+
+
+/**
+ * This appends an item to the list display as an edtiable item. It is used by showToDoList() to build the
+ * main list display with edit buttons
+ * @param inItem
+ * @param inIndex
+ */
+function appendEditableItemToListDisplay(inItem, inIndex) {
+    var listContentContainer = document.querySelector("#todo-list"),
+        listItem = document.createElement("li"),
+        listLabel = document.createElement("label"),
+        listInput = document.createElement("input"),
+        listSpan = document.createElement("span"),
+        listFirstParagraph = document.createElement("p"),
+        listContent = document.createTextNode(inItem.content),
+        listSecondParagraph = document.createElement("p"),
+        listTime = document.createElement("time");
+
+
+
+    listInput.setAttribute("type", "button");
+    listInput.setAttribute("value", "edit");
+    listLabel.appendChild(listInput);
+    listLabel.appendChild(listSpan);
+    listItem.appendChild(listLabel);
+
+    listFirstParagraph.appendChild(listContent);
+    listSecondParagraph.appendChild(listTime);
+    listItem.appendChild(listFirstParagraph);
+    listInput.appendChild(listSecondParagraph);
+
+    listItem.classList.add("todo-item");
+    listItem.setAttribute("data-todo-index", inIndex);
+    listItem.querySelector("input").checked = inItem.completed;
+
+    listContentContainer.appendChild(listItem);
 
     listItem.addEventListener("click", function(e) {
         inItem.completed = listItem.querySelector("input").checked
@@ -224,6 +282,8 @@ function initializeApp() {
 }
 
 window.onload = function () {
+    var listDisplayMode = true;
+
     console.log("starting the application...");
 
     // drawer events
@@ -233,6 +293,15 @@ window.onload = function () {
     // main screen events
     document.querySelector(".list-name").addEventListener("click", renameCurrentList);
     document.querySelector('#add-new-todo-item').addEventListener ('click', addNewTodoItem);
+    document.querySelector('#edit-list-mode').addEventListener ('click', function() {
+        if (listDisplayMode) {
+            showToDoList(currentList);
+        } else {
+            showToDoList(currentList, "edit");
+        }
+        listDisplayMode = !listDisplayMode;
+    });
+
 
     // to do item details events
     document.querySelector('#back-to-list').addEventListener ('click', function () {
