@@ -67,7 +67,14 @@ function refreshToDoLists() {
 
 /**
  * Picks a given to do list and displays it in the main screen.
+ *
+ * A to do list can be displayed in two modes: edit and display,
+ * the first mode displays a button besides each item that the user
+ * can click to edit the item. The second mode displayes a checkbox that the user
+ * can click to mark an item done.
+ *
  * @param inList
+ * @param inMode
  */
 function showToDoList(inList, inMode) {
     var listNameContainer = document.querySelector(".list-name"),
@@ -224,7 +231,10 @@ function renameCurrentList() {
     });
 }
 
-
+/**
+ * This function adds a new to do item to the current list. Since our program is a "auto-save" program,
+ * we save the list after adding the new item.
+ */
 function addNewTodoItem() {
     var todoItem = new ToDoItem("Untitled To Do");
     addItemToToDoList(currentList, todoItem);
@@ -239,6 +249,11 @@ function addNewTodoItem() {
     });
 }
 
+/**
+ * This function displays a given item from the current to do list in a detail view that the user can use
+ * to edit.
+ * @param inItemIndex
+ */
 function showToDoItemDetails(inItemIndex) {
     var todoItem = currentList.items[inItemIndex];
     currentItemIndex = inItemIndex;
@@ -248,6 +263,15 @@ function showToDoItemDetails(inItemIndex) {
     document.querySelector('[data-position="current"]').className = 'left';
 }
 
+/**
+ * This function is called when the user goes from the item detail screen to the list screen, or, whenever
+ * something changes in the detail view.
+ *
+ * It is also responsible for setting the alarm for the to do item.
+ *
+ * todo: bug in time and date input using the building blocks
+ * todo: remake the alarm calls
+ */
 function saveTodoItemChanges() {
     var itemTitle = document.querySelector("#todo-item-content").value,
         isAlarmSet = document.querySelector("#todo-item-set-alarm").checked,
@@ -312,6 +336,10 @@ function initializeApp() {
 
 }
 
+
+/**
+ * Application initialization, basically binding buttons and loading the lists
+ */
 window.onload = function () {
     console.log("starting the application...");
 
