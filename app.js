@@ -1,3 +1,24 @@
+/**
+ * TO DO App
+ *
+ * OBJECTIVE
+ *
+ * Create a simple to do list management app to demonstrate some common features and functionalities used by
+ * Firefox OS apps.
+ *
+ * WEB API USAGE
+ *
+ * This app uses IndexedDB to store its data, you can learn more about it at:
+ * https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
+ *
+ * It uses the Open Web Apps API to provide self-installation feature as documented at:
+ * https://developer.mozilla.org/en-US/docs/Web/Apps/JavaScript_API?redirectlocale=en-US&redirectslug=JavaScript_API
+ *
+ * Alarms are scheduled using the Alarms API described at:
+ * https://wiki.mozilla.org/WebAPI/AlarmAPI
+ *
+ */
+
 var currentList, currentItemIndex;
 var listDisplayMode = true;
 

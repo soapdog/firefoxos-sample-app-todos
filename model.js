@@ -6,6 +6,11 @@
  *
  * First we handle the indexedDB setup then we implement the to do
  * handling routines.
+ *
+ * You can learn more about IndexedDB at:
+ *
+ *   https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
+ *
  */
 
 const dbName = "todo";
