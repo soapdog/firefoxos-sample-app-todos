@@ -3,23 +3,23 @@
 <head>
     <title>ToDos</title>
     <meta charset="utf8"/>
-    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, user-scalable=no">
 
     <!--
     Gaia Building Blocks Styles
     learn more about Gaia Building Blocks at:
     http://buildingfirefoxos.com/building-blocks/
     -->
-    <link href="building_blocks/util.css" rel="stylesheet" type="text/css">
-    <link href="building_blocks/fonts.css" rel="stylesheet" type="text/css">
-    <link href="building_blocks/transitions.css" rel="stylesheet" type="text/css">
-    <link href="building_blocks/style/headers.css" rel="stylesheet" type="text/css">
-    <link href="building_blocks/style_unstable/lists.css" rel="stylesheet" type="text/css">
-    <link href="building_blocks/style_unstable/drawer.css" rel="stylesheet" type="text/css">
-    <link href="building_blocks/style/input_areas.css" rel="stylesheet" type="text/css">
-    <link href="building_blocks/style/switches.css" rel="stylesheet" type="text/css">
-    <link href="building_blocks/style/edit_mode.css" rel="stylesheet" type="text/css">
-    <link href="building_blocks/style/status.css" rel="stylesheet" type="text/css">
+    <link href="building_blocks/util.css" rel="stylesheet">
+    <link href="building_blocks/fonts.css" rel="stylesheet">
+    <link href="building_blocks/transitions.css" rel="stylesheet">
+    <link href="building_blocks/style/headers.css" rel="stylesheet">
+    <link href="building_blocks/style_unstable/lists.css" rel="stylesheet">
+    <link href="building_blocks/style_unstable/drawer.css" rel="stylesheet">
+    <link href="building_blocks/style/input_areas.css" rel="stylesheet">
+    <link href="building_blocks/style/switches.css" rel="stylesheet">
+    <link href="building_blocks/style/edit_mode.css" rel="stylesheet">
+    <link href="building_blocks/style/status.css" rel="stylesheet">
 
 
 
@@ -35,17 +35,9 @@
     <!--
     Our custom CSS entries are on custom.css
     -->
-    <link rel="stylesheet" href="custom.css" type="text/css"/>
+    <link rel="stylesheet" href="custom.css"/>
 
-    <!--
-    Most of the logic of the application is contained in app.js with some general
-    utility functions in utils.js. The routines responsible for manipulating to do
-    lists are on model.js
-    -->
-    <script src="model.js"></script>
-    <script src="utils.js"></script>
-    <script src="status.js"></script>
-    <script src="app.js"></script>
+
 </head>
 <body>
 
@@ -102,13 +94,23 @@
             </p>
             <p>
                 <input type="checkbox" id="todo-item-set-alarm"/><span>Set alarm</span>
-                <input type="date" class="hidden" id="todo-item-alarm-date" />
-                <input type="time" class="hidden" id="todo-item-alarm-time"/>
+                <input type="date" class="hidden" id="todo-item-alarm-date">
+                <input type="time" class="hidden" id="todo-item-alarm-time">
                 <button>Tap to set alarm</button>
             </p>
         </form>
     </article>
 </section>
 
+
+<!--
+  Most of the logic of the application is contained in app.js with some general
+  utility functions in utils.js. The routines responsible for manipulating to do
+  lists are on model.js
+  -->
+<script src="model.js"></script>
+<script src="utils.js"></script>
+<script src="status.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
