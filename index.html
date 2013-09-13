@@ -20,6 +20,8 @@
     <link href="building_blocks/style/switches.css" rel="stylesheet">
     <link href="building_blocks/style/edit_mode.css" rel="stylesheet">
     <link href="building_blocks/style/status.css" rel="stylesheet">
+    <link href="building_blocks/style_unstable/toolbars.css" rel="stylesheet">
+
 
 
 
@@ -77,6 +79,16 @@
                 </ul>
             </div>
         </article>
+        <div role="toolbar">
+            <ul>
+                <li><button class="action-icon delete">delete</button></li>
+            </ul>
+            <ul>
+                <li><button class="action-icon email-flag">Flag</button></li>
+                <li><button class="action-icon email-markread">Mark read</button></li>
+                <li><button class="action-icon move">Move</button></li>
+            </ul>
+        </div>
     </section>
 </section>
 
@@ -105,7 +117,7 @@
 
 <!--
   Most of the logic of the application is contained in app.js with some general
-  utility functions in utils.js. The routines responsible for manipulating to do
+  utility functions in utils.js and status.js. The routines responsible for manipulating to do
   lists are on model.js
   -->
 <script src="model.js"></script>
