@@ -179,8 +179,13 @@ function deleteList(inId, inCallback) {
     console.log("Deleting list...");
     var request = db.transaction(["todo"], "readwrite").objectStore("todo").delete(inId);
 
-    request.onsuccess = function (event) {
+    request.onsuccess = function () {
         console.log("List deleted!");
-        inCallback();
+        inCallback(null, true);
+    };
+
+    request.onerror = function() {
+        console.log("Problem deleting list");
+        inCallback(true, null);
     };
 }

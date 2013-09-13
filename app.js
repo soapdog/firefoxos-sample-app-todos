@@ -100,6 +100,7 @@ function showToDoList(inList, inMode) {
     }
 
     currentList = inList;
+    console.log(JSON.stringify(currentList));
 }
 
 /**
@@ -120,7 +121,7 @@ function appendItemToListDisplay(inItem, inIndex) {
         listTime = document.createElement("time");
 
 
-
+     /*
     listInput.setAttribute("type", "checkbox");
     listLabel.appendChild(listInput);
     listLabel.appendChild(listSpan);
@@ -134,12 +135,41 @@ function appendItemToListDisplay(inItem, inIndex) {
     listItem.classList.add("todo-item");
     listItem.setAttribute("data-todo-index", inIndex);
     listItem.querySelector("input").checked = inItem.completed;
+    */
 
+    listFirstParagraph.appendChild(listContent);
+
+    if (inItem.completed) {
+        listFirstParagraph.classList.add("task-done");
+        listFirstParagraph.classList.remove("task-open");
+    } else {
+        listFirstParagraph.classList.remove("task-done");
+        listFirstParagraph.classList.add("task-open");
+    }
+
+    listItem.appendChild(listFirstParagraph);
     listContentContainer.appendChild(listItem);
 
-    console.log(listContentContainer.innerHTML);
-
     listItem.addEventListener("click", function(e) {
+        inItem.completed = !inItem.completed;
+        currentList.items[inIndex] = inItem;
+        saveToDoList(currentList, function(err, succ){
+            if (!err) {
+                console.log("list saved.");
+                currentList.id = succ;
+            }
+        });
+
+        if (inItem.completed) {
+            listFirstParagraph.classList.add("task-done");
+            listFirstParagraph.classList.remove("task-open");
+        } else {
+            listFirstParagraph.classList.remove("task-done");
+            listFirstParagraph.classList.add("task-open");
+        }
+
+
+        /*
         inItem.completed = listItem.querySelector("input").checked
         currentList.items[inIndex] = inItem;
         saveToDoList(currentList, function(err, succ){
@@ -148,6 +178,7 @@ function appendItemToListDisplay(inItem, inIndex) {
                 currentList.id = succ;
             }
         });
+        */
     });
 
 }
@@ -260,6 +291,8 @@ function showToDoItemDetails(inItemIndex) {
     var todoItem = currentList.items[inItemIndex];
     currentItemIndex = inItemIndex;
 
+    console.log("todo item", JSON.stringify(todoItem));
+
     document.querySelector("#todo-item-content").value = todoItem.content;
     document.querySelector('#todo-item-detail').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
@@ -276,7 +309,7 @@ function showToDoItemDetails(inItemIndex) {
  */
 function saveTodoItemChanges() {
     var itemTitle = document.querySelector("#todo-item-content").value,
-        isAlarmSet = document.querySelector("#todo-item-set-alarm").checked,
+        isAlarmSet = false,
         alarmDate = document.querySelector("#todo-item-alarm-date").value,
         alarmTime = document.querySelector("#todo-item-alarm-time").value;
 
@@ -338,6 +371,20 @@ function initializeApp() {
 
 }
 
+function deleteCurrentTodo() {
+    var shouldDelete = confirm("Delete the current To Do list?");
+
+    if (shouldDelete) {
+        deleteList(currentList.id, function (err, succ) {
+            console.log("callback from delete", err, succ);
+            if (!err) {
+                refreshToDoLists();
+                initializeApp();
+            }
+        });
+    }
+}
+
 
 /**
  * Application initialization, basically binding buttons and loading the lists
@@ -365,6 +412,7 @@ window.onload = function () {
 
     // to do item details events
     document.querySelector('#back-to-list').addEventListener ('click', function () {
+        console.log("going back to the main view");
         saveTodoItemChanges();
         showToDoList(currentList);
         document.querySelector('#todo-item-detail').className = 'right';
@@ -373,6 +421,7 @@ window.onload = function () {
 
     document.querySelector("#todo-item-content").addEventListener("input", saveTodoItemChanges);
 
+    document.getElementById("delete-current-todo-list").addEventListener("click", deleteCurrentTodo);
 
 
     // the entry point for the app is the following command

@@ -20,6 +20,7 @@
     <link href="building_blocks/style/switches.css" rel="stylesheet">
     <link href="building_blocks/style/edit_mode.css" rel="stylesheet">
     <link href="building_blocks/style/status.css" rel="stylesheet">
+    <link href="building_blocks/style/buttons.css" rel="stylesheet">
     <link href="building_blocks/style_unstable/toolbars.css" rel="stylesheet">
 
 
@@ -74,19 +75,14 @@
         </header>
         <article class="content scrollable header">
             <div data-type="list">
-                <ul id="todo-list" data-type="edit">
+                <ul id="todo-list">
 
                 </ul>
             </div>
         </article>
         <div role="toolbar">
             <ul>
-                <li><button class="action-icon delete">delete</button></li>
-            </ul>
-            <ul>
-                <li><button class="action-icon email-flag">Flag</button></li>
-                <li><button class="action-icon email-markread">Mark read</button></li>
-                <li><button class="action-icon move">Move</button></li>
+                <li><button id="delete-current-todo-list" class="action-icon delete">delete</button></li>
             </ul>
         </div>
     </section>
@@ -100,16 +96,19 @@
     </header>
     <article class="content scrollable header">
         <form>
+
             <p>
-                <input id="todo-item-content" type="text" placeholder="Placeholder" required>
+                <input id="todo-item-content" type="text" placeholder="Placeholder" required />
                 <button type="reset">Clear</button>
             </p>
             <p>
-                <input type="checkbox" id="todo-item-set-alarm"/><span>Set alarm</span>
-                <input type="date" class="hidden" id="todo-item-alarm-date">
-                <input type="time" class="hidden" id="todo-item-alarm-time">
-                <button>Tap to set alarm</button>
+                <textarea placeholder="Notes about this todo"></textarea>
             </p>
+            <p>
+                <button id="alarm-set" class="icon icon-dialog">Tap to set alarm</button>
+            </p>
+            <input type="date" class="hidden" id="todo-item-alarm-date">
+            <input type="time" class="hidden" id="todo-item-alarm-time">
         </form>
     </article>
 </section>

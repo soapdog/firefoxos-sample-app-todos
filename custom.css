@@ -168,7 +168,12 @@ div[role="slider"] > label.icon {
 
 /* custom */
 [data-type="list"] {
-    height: 480px;
+    height: 400px;
+}
+
+#todo-list {
+    height: 340px;
+    overflow: auto;
 }
 
 .icon.icon-add {
@@ -185,5 +190,14 @@ div[role="slider"] > label.icon {
 #edit-todo-item input[type="time"] {
     position: absolute;
     opacity: 0;
+}
+
+.task-done {
+    text-decoration: line-through;
+    color: lightgray;
+}
+
+.task-open {
+    text-decoration: none;
 }
 
