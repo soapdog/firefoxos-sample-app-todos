@@ -117,6 +117,7 @@ function appendItemToListDisplay(inItem, inIndex) {
         listSpan = document.createElement("span"),
         listFirstParagraph = document.createElement("p"),
         listContent = document.createTextNode(inItem.content),
+        itemEditButton = document.createElement("button"),
         listSecondParagraph = document.createElement("p"),
         listTime = document.createElement("time");
 
@@ -138,6 +139,11 @@ function appendItemToListDisplay(inItem, inIndex) {
     */
 
     listFirstParagraph.appendChild(listContent);
+    listFirstParagraph.classList.add("position-left");
+
+    itemEditButton.classList.add("edit-button");
+    itemEditButton.innerHTML = "EDIT"
+
 
     if (inItem.completed) {
         listFirstParagraph.classList.add("task-done");
@@ -148,9 +154,10 @@ function appendItemToListDisplay(inItem, inIndex) {
     }
 
     listItem.appendChild(listFirstParagraph);
+    listItem.appendChild(itemEditButton);
     listContentContainer.appendChild(listItem);
 
-    listItem.addEventListener("click", function(e) {
+    listFirstParagraph.addEventListener("click", function(e) {
         inItem.completed = !inItem.completed;
         currentList.items[inIndex] = inItem;
         saveToDoList(currentList, function(err, succ){

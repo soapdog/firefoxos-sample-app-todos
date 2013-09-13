@@ -201,3 +201,18 @@ div[role="slider"] > label.icon {
     text-decoration: none;
 }
 
+.edit-button {
+    font-size: 10px;
+    background-color: lightgray;
+    float: right;
+    width: 10px;
+    text-decoration: none;
+    vertical-align: middle;
+    margin-top: 10px;
+    border-width: 0px;
+}
+
+.position-left {
+    float: left;
+}
+
