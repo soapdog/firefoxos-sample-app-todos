@@ -137,6 +137,8 @@ function appendItemToListDisplay(inItem, inIndex) {
 
     listContentContainer.appendChild(listItem);
 
+    console.log(listContentContainer.innerHTML);
+
     listItem.addEventListener("click", function(e) {
         inItem.completed = listItem.querySelector("input").checked
         currentList.items[inIndex] = inItem;
