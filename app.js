@@ -112,31 +112,10 @@ function showToDoList(inList, inMode) {
 function appendItemToListDisplay(inItem, inIndex) {
     var listContentContainer = document.querySelector("#todo-list"),
         listItem = document.createElement("li"),
-        listLabel = document.createElement("label"),
-        listInput = document.createElement("input"),
-        listSpan = document.createElement("span"),
         listFirstParagraph = document.createElement("p"),
         listContent = document.createTextNode(inItem.content),
-        itemEditButton = document.createElement("button"),
-        listSecondParagraph = document.createElement("p"),
-        listTime = document.createElement("time");
+        itemEditButton = document.createElement("button");
 
-
-     /*
-    listInput.setAttribute("type", "checkbox");
-    listLabel.appendChild(listInput);
-    listLabel.appendChild(listSpan);
-    listItem.appendChild(listLabel);
-
-    listFirstParagraph.appendChild(listContent);
-    listSecondParagraph.appendChild(listTime);
-    listItem.appendChild(listFirstParagraph);
-    listInput.appendChild(listSecondParagraph);
-
-    listItem.classList.add("todo-item");
-    listItem.setAttribute("data-todo-index", inIndex);
-    listItem.querySelector("input").checked = inItem.completed;
-    */
 
     listFirstParagraph.appendChild(listContent);
     listFirstParagraph.classList.add("position-left");
@@ -174,18 +153,10 @@ function appendItemToListDisplay(inItem, inIndex) {
             listFirstParagraph.classList.remove("task-done");
             listFirstParagraph.classList.add("task-open");
         }
+    });
 
-
-        /*
-        inItem.completed = listItem.querySelector("input").checked
-        currentList.items[inIndex] = inItem;
-        saveToDoList(currentList, function(err, succ){
-            if (!err) {
-                console.log("list saved.");
-                currentList.id = succ;
-            }
-        });
-        */
+    itemEditButton.addEventListener("click", function() {
+        showToDoItemDetails(inIndex);
     });
 
 }
