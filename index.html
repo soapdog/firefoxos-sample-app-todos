@@ -102,13 +102,25 @@
                 <button type="reset">Clear</button>
             </p>
             <p>
-                <textarea placeholder="Notes about this todo"></textarea>
+                <textarea id="todo-item-notes" placeholder="Notes about this todo"></textarea>
             </p>
-            <p>
-                <button id="alarm-set" class="icon icon-dialog">Tap to set alarm</button>
+            <p><span>Set Alarm?</span>
+                <label class="pack-switch">
+                    <input id="alarm-set" type="checkbox">
+                    <span></span>
+                </label>
             </p>
-            <input type="date" class="hidden" id="todo-item-alarm-date">
-            <input type="time" class="hidden" id="todo-item-alarm-time">
+            <ul id="alarm-controls" class="hidden">
+                <li class="start-date">
+                  <span class="button icon icon-dialog">
+                    <label>
+                        <input id="todo-alarm-datetime" placeholder="Tap to set date and time" type="datetime" />
+                    </label>
+                    <span class="datetime" id="start-date-locale"></span>
+                  </span>
+                </li>
+
+            </ul>
         </form>
     </article>
 </section>

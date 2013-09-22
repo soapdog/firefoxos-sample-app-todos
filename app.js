@@ -218,19 +218,63 @@ function addNewTodoItem() {
 }
 
 /**
+ * Display the todo item details on the interface
+ * @param inTodoItem
+ */
+function refreshItemDetails(inTodoItem) {
+    var itemContent = document.querySelector("#todo-item-content"),
+        alarmIsSet = document.querySelector("#alarm-set"),
+        itemNotes = document.querySelector("#todo-item-notes"),
+        alarmDateTime = document.querySelector("#todo-alarm-datetime");
+
+    itemContent.value = inTodoItem.content;
+    itemNotes.value = inTodoItem.notes;
+
+    if (inTodoItem.alarmIsSet) {
+        alarmIsSet.checked = true;
+    } else {
+        alarmIsSet.checked = false;
+    }
+
+    if (inTodoItem.alarm !== null) {
+        alarmDateTime.value = inTodoItem.alarm;
+    } else {
+        alarmDateTime.value = "Tap to set date and time"
+    }
+}
+
+
+/**
  * This function displays a given item from the current to do list in a detail view that the user can use
  * to edit.
  * @param inItemIndex
  */
 function showToDoItemDetails(inItemIndex) {
-    var todoItem = currentList.items[inItemIndex];
+    var todoItem = currentList.items[inItemIndex],
+        alarmIsSet = document.getElementById("alarm-set"),
+        alarmControls = document.getElementById("alarm-controls");
+
     currentItemIndex = inItemIndex;
 
     console.log("todo item", JSON.stringify(todoItem));
-
-    document.querySelector("#todo-item-content").value = todoItem.content;
+    refreshItemDetails(todoItem);
     document.querySelector('#todo-item-detail').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
+
+    if (alarmIsSet.checked) {
+        alarmControls.classList.remove("hidden");
+    } else {
+        alarmControls.classList.add("hidden");
+    }
+
+    alarmIsSet.addEventListener("click", function() {
+        // reveal date time buttons
+        if (alarmIsSet.checked) {
+            alarmControls.classList.remove("hidden");
+        } else {
+            alarmControls.classList.add("hidden");
+        }
+    });
 }
 
 /**
@@ -239,30 +283,84 @@ function showToDoItemDetails(inItemIndex) {
  *
  * It is also responsible for setting the alarm for the to do item.
  *
- * todo: bug in time and date input using the building blocks
  * todo: remake the alarm calls
  */
 function saveTodoItemChanges() {
     var itemTitle = document.querySelector("#todo-item-content").value,
-        isAlarmSet = false,
-        alarmDate = document.querySelector("#todo-item-alarm-date").value,
-        alarmTime = document.querySelector("#todo-item-alarm-time").value;
+        itemNotes = document.querySelector("#todo-item-notes").value,
+        isAlarmSet = document.querySelector("#alarm-set").checked,
+        alarmDate = document.querySelector("#todo-alarm-datetime").value,
+        currentTodoItem = currentList.items[currentItemIndex];
 
-    currentList.items[currentItemIndex].content = itemTitle;
+    currentTodoItem.content = itemTitle;
+    currentTodoItem.notes = itemNotes;
+
 
     if (isAlarmSet) {
-        currentList.items[currentItemIndex].alarmIsSet = true;
-        currentList.items[currentItemIndex].alarm = alarmDate;
+        currentTodoItem.alarmIsSet = true;
+        currentTodoItem.alarm = alarmDate;
         console.log("alarm is set to", alarmDate);
+    } else {
+        currentTodoItem.alarmIsSet = false;
+        currentTodoItem.alarm = null;
+        console.log("alarm cleared");
     }
 
+    maintainAlarms(currentTodoItem, function (err, succ) {
 
-    saveToDoList(currentList, function(err, succ){
-        if (!err) {
-            console.log("list saved after item changed");
-            currentList.id = succ;
+        if (err) {
+            utils.status.show("Could not schedule alarm!");
         }
+
+        saveToDoList(currentList, function(err, succ){
+            if (!err) {
+                console.log("list saved after item changed");
+                currentList.id = succ;
+            }
+        });
     });
+}
+
+/**
+ * Schedule alarms using AlarmAPI (https://developer.mozilla.org/en-US/docs/WebAPI/Alarm)
+ * @param inTodoItem
+ * @param inCallback
+ */
+function maintainAlarms(inTodoItem, inCallback) {
+
+    // Check is alarm was set and is now cleared, should cancel old alarm
+    if (inTodoItem.alarmIsSet === false && inTodoItem.alarmID !== 0) {
+        console.log("Removing alarm...");
+        if (inTodoItem.alarmID) {
+            navigator.mozAlarms.remove(inTodoItem.alarmID);
+        }
+    }
+
+    // Check if alarm is now set and alarm id is not 0 then
+    // clear old alarm and set it again
+    if (inTodoItem.alarmIsSet === true) {
+        console.log("Setting alarm");
+        if (inTodoItem.alarmID !== 0) {
+            // clear old alarm
+            navigator.mozAlarms.remove(inTodoItem.alarmID);
+        }
+
+        // Set new alarm
+        console.log("Setting alarm to: "+inTodoItem.alarm);
+        var date = new Date(inTodoItem.alarm);
+        var request = navigator.mozAlarms.add(date, "honorTimezone", inTodoItem);
+        request.onsuccess = function() {
+            console.log("Scheduled alarm, id:" + this.result.id);
+            inTodoItem.alarmID = this.result.id;
+            inCallback(null, inTodoItem);
+        }
+        request.onerror = function() {
+            console.log("Error: Could not schedule alarm.")
+            inTodoItem.alarmID = 0;
+            inTodoItem.alarmIsSet = false;
+            inCallback(true, null);
+        }
+    }
 }
 
 /**
@@ -334,6 +432,8 @@ window.onload = function () {
     // main screen events
     document.querySelector(".list-name").addEventListener("click", renameCurrentList);
     document.querySelector('#add-new-todo-item').addEventListener ('click', addNewTodoItem);
+    document.getElementById("delete-current-todo-list").addEventListener("click", deleteCurrentTodo);
+
 
 
     // to do item details events
@@ -347,7 +447,10 @@ window.onload = function () {
 
     document.querySelector("#todo-item-content").addEventListener("input", saveTodoItemChanges);
 
-    document.getElementById("delete-current-todo-list").addEventListener("click", deleteCurrentTodo);
+    // Deal with alarms
+    navigator.mozSetMessageHandler("alarm", function (mozAlarm) {
+        alert("Remember: " + mozAlarm.data.title);
+    });
 
 
     // the entry point for the app is the following command

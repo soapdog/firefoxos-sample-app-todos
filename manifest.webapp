@@ -15,5 +15,8 @@
     "name": "Andre Garzia",
     "url": "http://andregarzia.com"
   },
+  "messages": [
+    { "alarm": "/index.html" }
+  ],
   "default_locale": "en"
 }
