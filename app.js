@@ -312,6 +312,8 @@ function saveTodoItemChanges() {
             utils.status.show("Could not schedule alarm!");
         }
 
+        logAlarmData();
+
         saveToDoList(currentList, function(err, succ){
             if (!err) {
                 console.log("list saved after item changed");
@@ -319,6 +321,28 @@ function saveTodoItemChanges() {
             }
         });
     });
+}
+
+/**
+ * Used to display scheduled alarms in the console for debugging purposes
+ */
+function logAlarmData() {
+    var request = navigator.mozAlarms.getAll();
+
+    console.log("Dumping all alarm data...");
+
+    request.onsuccess = function () {
+        this.result.forEach(function (alarm) {
+            console.log('Id: ' + alarm.id);
+            console.log('date: ' + alarm.date);
+            console.log('respectTimezone: ' + alarm.respectTimezone);
+            console.log('data: ' + JSON.stringify(alarm.data));
+        });
+    };
+
+    request.onerror = function () {
+        console.log("An error occurred: " + this.error.name);
+    };
 }
 
 /**
@@ -348,18 +372,21 @@ function maintainAlarms(inTodoItem, inCallback) {
         // Set new alarm
         console.log("Setting alarm to: "+inTodoItem.alarm);
         var date = new Date(inTodoItem.alarm);
+
         var request = navigator.mozAlarms.add(date, "honorTimezone", inTodoItem);
+
         request.onsuccess = function() {
             console.log("Scheduled alarm, id:" + this.result.id);
             inTodoItem.alarmID = this.result.id;
             inCallback(null, inTodoItem);
-        }
+        };
+
         request.onerror = function() {
             console.log("Error: Could not schedule alarm.")
             inTodoItem.alarmID = 0;
             inTodoItem.alarmIsSet = false;
             inCallback(true, null);
-        }
+        };
     }
 }
 
@@ -447,14 +474,17 @@ window.onload = function () {
 
     document.querySelector("#todo-item-content").addEventListener("input", saveTodoItemChanges);
 
-    // Deal with alarms
-    navigator.mozSetMessageHandler("alarm", function (mozAlarm) {
-        alert("Remember: " + mozAlarm.data.title);
-    });
-
 
     // the entry point for the app is the following command
     refreshToDoLists();
     initializeApp();
+    logAlarmData();
 
 };
+
+
+// Deal with alarms
+navigator.mozSetMessageHandler("alarm", function (mozAlarm) {
+    console.log("Triggering alarm", JSON.stringify(mozAlarm));
+    alert("Remember: " + mozAlarm.data.content);
+});

@@ -5,6 +5,9 @@
   "permissions": {
       "storage": {
         "description": "Required for storing and retrieving to do lists."
+      },
+      "alarms": {
+        "description": "Required for scheduling alarms."
       }
   },
   "icons": {
