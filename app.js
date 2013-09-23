@@ -69,20 +69,13 @@ function refreshToDoLists() {
 /**
  * Picks a given to do list and displays it in the main screen.
  *
- * A to do list can be displayed in two modes: edit and display,
- * the first mode displays a button besides each item that the user
- * can click to edit the item. The second mode displayes a checkbox that the user
- * can click to mark an item done.
- *
  * @param inList
- * @param inMode
  */
-function showToDoList(inList, inMode) {
+function showToDoList(inList) {
     var listNameContainer = document.querySelector(".list-name"),
         listContentContainer = document.querySelector("#todo-list");
 
-    inMode = inMode || "display";
-    console.log("showing list in mode:", inMode);
+    console.log("showing todo list");
 
     listNameContainer.innerHTML = inList.title;
 
@@ -93,11 +86,8 @@ function showToDoList(inList, inMode) {
     for (var i = 0, len = inList.items.length; i < len; i++) {
         var todoItem = inList.items[i];
 
-        if (inMode === "display") {
-            appendItemToListDisplay(todoItem, i);
-        } else {
-            appendEditableItemToListDisplay(todoItem, i);
-        }
+        appendItemToListDisplay(todoItem, i);
+
     }
 
     currentList = inList;
@@ -106,7 +96,11 @@ function showToDoList(inList, inMode) {
 
 /**
  * This appends an item to the list display. It is used by showToDoList() to build the
- * main list display
+ * main list display.
+ *
+ * We build the elements used by the list display by hand, so expect a lot of createElement
+ * calls and css setting.
+ *
  * @param inItem
  * @param inIndex
  */
@@ -137,6 +131,12 @@ function appendItemToListDisplay(inItem, inIndex) {
     listItem.appendChild(itemEditButton);
     listContentContainer.appendChild(listItem);
 
+    /**
+     * The event below handles clicking on a task descriptions.
+     * This causes it to toggle between the crossed or normal
+     * display of the item. The list is saved automatically when the
+     * item changes.
+     */
     listFirstParagraph.addEventListener("click", function(e) {
         inItem.completed = !inItem.completed;
         currentList.items[inIndex] = inItem;
@@ -156,6 +156,10 @@ function appendItemToListDisplay(inItem, inIndex) {
         }
     });
 
+    /**
+     * The event handler below is used to edit a given task by displaying the
+     * details view for the to do item.
+     */
     itemEditButton.addEventListener("click", function() {
         showToDoItemDetails(inIndex);
     });
@@ -172,6 +176,9 @@ function createNewList() {
     var listTitle = window.prompt("Name your new To Do list", "Untitled List");
     var list = new ToDoList(listTitle);
 
+    /**
+     * Lists are always saved when something changes.
+     */
     saveToDoList(list, function(err, succ) {
         if (!err) {
             list.id = succ;
@@ -191,6 +198,9 @@ function renameCurrentList() {
 
     currentList.title = listTitle;
 
+    /**
+     * Lists are always saved when something changes.
+     */
     saveToDoList(currentList, function(err, succ) {
         if (!err) {
             currentList.id = succ;
@@ -208,6 +218,9 @@ function addNewTodoItem() {
     var todoItem = new ToDoItem("Untitled To Do");
     addItemToToDoList(currentList, todoItem);
 
+    /**
+     * Lists are always saved when something changes.
+     */
     saveToDoList(currentList, function(err, succ) {
         if (!err) {
             currentList.id = succ;
@@ -219,7 +232,7 @@ function addNewTodoItem() {
 }
 
 /**
- * Display the todo item details on the interface
+ * Display the to do item details on the interface
  * @param inTodoItem
  */
 function refreshItemDetails(inTodoItem) {
@@ -268,6 +281,10 @@ function showToDoItemDetails(inItemIndex) {
         alarmControls.classList.add("hidden");
     }
 
+    /**
+     * This event handler deals with the "Alarm is Set" switch. It will cause the date time selection button to
+     * be revealed or hidden depending on the state of the switch.
+     */
     alarmIsSet.addEventListener("click", function() {
         // reveal date time buttons
         if (alarmIsSet.checked) {
@@ -284,7 +301,7 @@ function showToDoItemDetails(inItemIndex) {
  *
  * It is also responsible for setting the alarm for the to do item.
  *
- * todo: remake the alarm calls
+ * fixme: remake the alarm calls. The events are scheduled fine but the event is not triggering?!
  */
 function saveTodoItemChanges() {
     var itemTitle = document.querySelector("#todo-item-content").value,
@@ -307,6 +324,9 @@ function saveTodoItemChanges() {
         console.log("alarm cleared");
     }
 
+    /**
+     * We need to take special care to keep the alarms up to date.
+     */
     maintainAlarms(currentTodoItem, function (err, succ) {
 
         if (err) {
@@ -487,7 +507,10 @@ window.onload = function () {
 };
 
 
-// Deal with alarms
+/**
+ * The event handler below is triggered when an alarm message is sent to the application.
+ * fixme: this event is not firing, don't know why, the documentation says it should work.
+ */
 navigator.mozSetMessageHandler("alarm", function (mozAlarm) {
     console.log("Triggering alarm", JSON.stringify(mozAlarm));
     alert("Remember: " + mozAlarm.data.content);
