@@ -15,12 +15,13 @@
  * https://developer.mozilla.org/en-US/docs/Web/Apps/JavaScript_API?redirectlocale=en-US&redirectslug=JavaScript_API
  *
  * Alarms are scheduled using the Alarms API described at:
- * https://wiki.mozilla.org/WebAPI/AlarmAPI
+ * https://developer.mozilla.org/en-US/docs/WebAPI/Alarm
+ *
+ * todo: there is a bug happening with the Alarms. They are scheduled correctly but the event is not firing.
  *
  */
 
 var currentList, currentItemIndex;
-var listDisplayMode = true;
 
 /**
  * This function builds the list of to do lists used in the drawer in the
@@ -431,6 +432,9 @@ function initializeApp() {
 
 }
 
+/**
+ * Deletes the current todo list and refreshes de interface.
+ */
 function deleteCurrentTodo() {
     var shouldDelete = confirm("Delete the current To Do list?");
 
